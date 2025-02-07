@@ -1,7 +1,6 @@
 from pymongo import MongoClient
 import hashlib
 
-from packages.server import user
 
 uri = "mongodb://localhost:27017/"
 client = MongoClient(uri)

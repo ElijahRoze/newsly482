@@ -11,6 +11,9 @@ origins = [
     "http://localhost:5173",
     "http://localhost:8080",
 ]
+
+# Allow the website to make API calls
+# without getting blocked from the browser.
 app.add_middleware(
     CORSMiddleware,
     allow_origins=origins,
@@ -27,6 +30,8 @@ async def root():
 async def handle_login(request: LoginRequest):
     error_msg = None
     try:
+        # Try to login to the systsem through the database
+        # if it fails, return an error message based on the type of failure
         if login(request.username, request.password):
             return {
                 "msg": "Success"
@@ -35,13 +40,16 @@ async def handle_login(request: LoginRequest):
             error_msg = "Incorrect password"
     except Exception as e:
         error_msg = "User not found"
-    
+
+    # Return the error to the website if something happened
     raise HTTPException(status_code=400, detail=error_msg)
 
 
 @app.post("/users/create")
 async def create(request: LoginRequest):
     try:
+        # Attempt to create a new user
         return create_user(request.username, request.password)
     except:
+        # If an error happened, assume the user already exists and return this
         raise HTTPException(status_code=400, detail="User already exists")

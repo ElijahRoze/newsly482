@@ -1,0 +1,25 @@
+services:
+
+  mongo:
+    image: mongo:5.0.6
+    ports:
+      - 27017:27017
+    volumes:
+      - mongodata:/data/db
+
+  server:
+    image: newsly-server:latest
+    network_mode: host
+    ports:
+      - 8000:8000
+
+  web:
+    network_mode: host
+    image: newsly-web:latest
+    ports:
+      - 5173:5173
+
+
+
+volumes:
+  mongodata:
